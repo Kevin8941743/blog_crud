@@ -18,3 +18,13 @@ const pool = new Pool({
 const app = express()
 app.use(express.json())
 const PORT = 3000
+
+const limiter = rateLimit({
+    max: 10,
+    windowMs: 20 * 60 * 1000,
+    message: "Requests overloaded! Please wait 20 minutes."
+})
+
+const client = createClient({
+    url: process.env.REDIS_URL
+})
