@@ -108,3 +108,34 @@ app.put("/put/:id", limiter, async (req, res) => {
         console.error("Resource could not be found!", error.message)
     }
 })
+
+app.get("/get/:single", limiter, async (req, res) => {
+    
+    try {
+        const item = req.params.single
+        const cache = await client.get(`get:${item}`)
+
+        if (cache) {
+            console.log("Getting the data from cache...")
+            return res.json(JSON.parse(cache))
+        }
+
+        console.log("Fetching data in the database...")
+
+        const result = await pool.query(
+            `SELECT * FROM posts WHERE id=$1`, [item]
+        )
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({error: "Post was not found"})
+        }
+        
+        await client.setEx(`get:${item}`, 1800, JSON.stringify(result.rows[0]))
+
+        res.json(result.rows[0])
+
+    } catch (error) {
+        console.error("Error detected!", error.message)
+    }
+
+})
