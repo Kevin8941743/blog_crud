@@ -16,3 +16,20 @@ services:
     image: redis:latest
     container_name: redis_database
   
+  backend:
+    build: .
+    container_name: node_code
+    ports:
+      - 3000:3000
+    environment:
+      DB_HOST: database
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_DATABASE}
+      REDIS_HOST: redis 
+    depends_on:
+      - redis
+      - database
+
+volumes:
+  psql:
