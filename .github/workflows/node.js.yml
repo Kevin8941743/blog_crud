@@ -43,13 +43,12 @@ jobs:
     - run: npm install
     
     - name: Test syntax of server.js to ensure its correct
+      run: npm test
       env:
         POSTGRES_USER: ${{ secrets.DB_USER }}
         POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         POSTGRES_DB: ${{ secrets.DB_NAME }}
-        POSTGRES_HOST: localhost
         REDIS_URL: redis://localhost:6379
-      run: node -c server.js
       
     - name: Build a Docker image and naming it blog-api
       run: docker build -t blog-api .
