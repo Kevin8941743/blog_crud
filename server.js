@@ -56,3 +56,24 @@ app.post("/post", limiter, async (req, res) => {
     console.error("Could not post data!", error.message)
     res.status(500).json({ error: error.message})
 }})
+
+app.get("/get/all", limiter, async (req, res) => {
+    
+    const redis_cache = await client.get("posts:all")
+
+    if (redis_cache) {
+        console.log(`Fetching all the data from the cache...`)
+        return res.json(JSON.parse(redis_cache))
+    }
+
+    console.log("Fetching data from the database...")
+
+    const result = await pool.query(
+        `SELECT * FROM posts`
+    )
+
+    await client.setEx("posts:all", 1800, JSON.stringify(result.rows))
+
+    res.json(result.rows)
+
+})
