@@ -28,3 +28,10 @@ const limiter = rateLimit({
 const client = createClient({
     url: process.env.REDIS_URL
 })
+
+try {
+    await client.connect()
+    console.log("The connection to Redis has been successful!")
+} catch (error) {
+    console.error("Could not establish Redis connection!", error.message)
+}
