@@ -18,7 +18,21 @@ jobs:
       matrix:
         node-version: [20.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    services:
+      database:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+        ports:
+          - 5432:5432
 
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+  
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
@@ -27,4 +41,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
-    - run: node -c server.js
+    
+    - name: Test syntax of server.js to ensure its correct
+      env:
+        POSTGRES_USER: ${{ secrets.DB_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        POSTGRES_DB: ${{ secrets.DB_NAME }}
+        POSTGRES_HOST: localhost
+        REDIS_URL: redis://localhost:6379
+      run: node -c server.js
+      
+    - name: Build a Docker image and naming it blog-api
+      run: docker build -t blog-api .
