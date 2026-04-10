@@ -11,4 +11,8 @@ services:
     volumes:
       - psql:/var/lib/postgresql
       - ./table.sql:/docker-entrypoint-initdb.d/table.sql
+
+  redis:
+    image: redis:latest
+    container_name: redis_database
   
