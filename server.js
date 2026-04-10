@@ -35,3 +35,24 @@ try {
 } catch (error) {
     console.error("Could not establish Redis connection!", error.message)
 }
+
+app.post("/post", limiter, async (req, res) => {
+    try {
+
+    const { title, content, category, tags } = req.body
+
+    const result = await pool.query(
+        `INSERT INTO posts (title, content, category, tags)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;`,
+        [title, content, category, tags]
+    )
+
+    await client.del("posts:all")
+
+    res.status(201).json(result.rows[0])
+
+} catch (error) {
+    console.error("Could not post data!", error.message)
+    res.status(500).json({ error: error.message})
+}})
