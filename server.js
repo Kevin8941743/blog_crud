@@ -16,6 +16,7 @@ const pool = new Pool({
 })
 
 const app = express()
+app.set("trust proxy", 1)
 app.use(express.json())
 const PORT = 3000
 
