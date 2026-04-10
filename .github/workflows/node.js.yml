@@ -41,6 +41,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
+
+    - name: Debug package.json
+      run: cat package.json
     
     - name: Test syntax of server.js to ensure its correct
       run: npm test
@@ -52,6 +55,3 @@ jobs:
       
     - name: Build a Docker image and naming it blog-api
       run: docker build -t blog-api .
-
-    - name: Debug package.json
-      run: cat package.json
