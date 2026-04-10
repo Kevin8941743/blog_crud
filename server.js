@@ -77,3 +77,34 @@ app.get("/get/all", limiter, async (req, res) => {
     res.json(result.rows)
 
 })
+
+app.put("/put/:id", limiter, async (req, res) => {
+
+    try {
+
+        const { title, content, category, tags } = req.body
+        
+        const id = req.params.id
+        
+        const result = await pool.query(
+            `UPDATE posts
+            SET title = $1, content = $2, category = $3, tags = $4
+            WHERE ID = $5
+            RETURNING *
+            `,
+            [title, content, category, tags, id]
+        )
+
+        if (result.rowCount === 0) {
+            return res.status(400).json({error: "Post could not be found!"})
+        }
+
+        await client.del("posts:all")
+        await client.del(`get:${id}`)
+
+        res.status(200).json(result.rows[0])
+
+    } catch (error) {
+        console.error("Resource could not be found!", error.message)
+    }
+})
