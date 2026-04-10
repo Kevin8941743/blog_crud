@@ -52,3 +52,6 @@ jobs:
       
     - name: Build a Docker image and naming it blog-api
       run: docker build -t blog-api .
+
+    - name: Debug package.json
+      run: cat package.json
