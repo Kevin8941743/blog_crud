@@ -139,3 +139,35 @@ app.get("/get/:single", limiter, async (req, res) => {
     }
 
 })
+
+
+app.delete("/delete/:id", limiter, async(req, res) => {
+
+    try {
+
+        const item = req.params.id
+
+        console.log("Getting data from the database...")
+
+        const result = await pool.query(
+            `DELETE FROM posts WHERE id=$1 RETURNING *`, 
+            [item],
+        )
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({error: "Could not find the desired post!"})
+        }
+    
+        await client.del(`get:${item}`)
+        await client.del(`posts:all`)
+
+        res.status(200).json(result.rows[0])
+
+    } catch (error) {
+        console.error("Error deleting posts", error.message)
+    }
+})
+
+app.listen(PORT, () => {
+    console.log(`The server is now listening to port ${PORT}`)
+})
