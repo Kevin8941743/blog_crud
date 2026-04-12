@@ -89,7 +89,11 @@ docker run -p 3000:3000 blog-api
 
 ## Deployment (Render)
 
-This project was deployed online using Render
+The API is deployed and accesible here:
+
+[Try the API:](https://blog-crud-c73k.onrender.com)
+
+You can test all endpoints directly from the live server.
 
 Steps:
 
