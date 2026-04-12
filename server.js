@@ -184,6 +184,13 @@ app.get("/posts", limiter, async (req, res) => {
         return res.json(JSON.parse(redis_cache))
     }
 
+    console.log("Getting data from the database!")
+
+    const result = await pool.query(
+        `SELECT * FROM posts WHERE title LIKE $1`,
+        [`%${term}%`]
+    )
+
 
 })
 
