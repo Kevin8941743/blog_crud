@@ -91,7 +91,7 @@ docker run -p 3000:3000 blog-api
 
 The API is deployed and accesible here:
 
-[Try the API:](https://blog-crud-c73k.onrender.com)
+[Try the API:](https://blog-crud-c73k.onrender.com/get/all)
 
 You can test all endpoints directly from the live server.
 
