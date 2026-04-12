@@ -163,5 +163,11 @@ GitHub Actions is configured to:
 •	Build a Docker image
 •	Run with PostgreSQL and Redis services
 
+## License
+
+This project is open source and available under the MIT License.
+
+roadmap.sh Node.js Blogging Platform API project URL: https://roadmap.sh/projects/blogging-platform-api
+
 
 
