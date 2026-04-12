@@ -169,6 +169,15 @@ app.delete("/delete/:id", limiter, async(req, res) => {
     }
 })
 
+app.get("/posts", limiter, async (req, res) => {
+
+    if (!req.query.term) {
+        return res.status(400).json({ error: "Item was not inputted!"})
+    }
+
+
+})
+
 app.listen(PORT, () => {
     console.log(`The server is now listening to port ${PORT}`)
 })
