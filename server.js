@@ -193,11 +193,11 @@ app.get("/posts", limiter, async (req, res) => {
 
     if (result.rows.length === 0) {
         return res.json({  Empty: "No matches found"})
-
     }
 
-
-
+    client.setEx(`posts:${term}`, 1800, JSON.stringify(result.rows))
+    
+    res.json(result.rows)
 })
 
 app.listen(PORT, () => {
