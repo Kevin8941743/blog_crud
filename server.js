@@ -175,6 +175,15 @@ app.get("/posts", limiter, async (req, res) => {
         return res.status(400).json({ error: "Item was not inputted!"})
     }
 
+    const term = req.query.term.toLowerCase()
+
+    const redis_cache = await client.get(`posts:${term}`)
+
+    if (redis_cache) {
+        console.log("Getting data")
+        return res.json(JSON.parse(redis_cache))
+    }
+
 
 })
 
