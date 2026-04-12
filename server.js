@@ -191,6 +191,12 @@ app.get("/posts", limiter, async (req, res) => {
         [`%${term}%`]
     )
 
+    if (result.rows.length === 0) {
+        return res.json({  Empty: "No matches found"})
+
+    }
+
+
 
 })
 
